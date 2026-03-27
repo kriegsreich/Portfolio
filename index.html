@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Kriegsreich</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<!-- Corner Decorations -->
+<div class="corner-decor top-left"></div>
+<div class="corner-decor top-right"></div>
+<div class="corner-decor bottom-left"></div>
+<div class="corner-decor bottom-right"></div>
+
+<!-- Floating Particles -->
+<div class="particles-container" id="particles"></div>
+
+<!-- Section Divider Top -->
+<div class="section-divider top">
+  <span></span>
+  <div class="divider-icon"></div>
+  <span></span>
+</div>
+
+<section class="hero fade-in" id="section-0">
+  <video autoplay muted loop class="hero-bg">
+    <source src="assets/bg.mp4" type="video/mp4">
+  </video>
+  <h1>Kriegsreich</h1>
+  <p class="subtitle">I create cinematic edits using Adobe Premiere Pro</p>
+</section>
+
+<section class="projects fade-in" id="section-1">
+  <h2 class="section-title">Projects</h2>
+
+  <div class="project">
+    <a href="project1.html" class="project-link">
+      <img src="https://i.ytimg.com/vi/NnxwMjfUUzk/hqdefault.jpg" alt="My First Edit">
+    </a>
+
+    <h3>My First Edit</h3>
+
+    <div class="project-buttons">
+      <button class="btn btn-primary" onclick="openModal('assets/YTDown.com_YouTube_2hollis-Poster-Boy-Slowed-Reverb-Lyrics_Media_NnxwMjfUUzk_001_1080p.mp4')">View Project</button>
+      <a href="https://www.youtube.com/watch?v=NnxwMjfUUzk" target="_blank" class="btn btn-secondary">Review</a>
+    </div>
+  </div>
+</section>
+
+<div id="videoModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <video id="modalVideo" controls>
+      <source src="assets/YTDown.com_YouTube_2hollis-Poster-Boy-Slowed-Reverb-Lyrics_Media_NnxwMjfUUzk_001_1080p.mp4" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+<script>
+(function() {
+  var modal = document.getElementById('videoModal');
+  var modalVideo = document.getElementById('modalVideo');
+  var bgGlow = document.querySelector('.bg-glow');
+
+  document.addEventListener('mousemove', function(e) {
+    bgGlow.style.left = (e.clientX - 250) + 'px';
+    bgGlow.style.top = (e.clientY - 250) + 'px';
+  });
+
+  document.addEventListener('mouseenter', function(e) {
+    bgGlow.classList.add('following');
+    bgGlow.style.left = (e.clientX - 250) + 'px';
+    bgGlow.style.top = (e.clientY - 250) + 'px';
+  });
+
+  document.addEventListener('mouseleave', function() {
+    bgGlow.classList.remove('following');
+  });
+
+  window.openModal = function(src) {
+    modalVideo.src = src;
+    modal.classList.add('show');
+    modalVideo.currentTime = 0;
+    modalVideo.play();
+  };
+
+  window.closeModal = function() {
+    modal.classList.remove('show');
+    modalVideo.pause();
+    modalVideo.src = "";
+  };
+
+  var fadeElements = document.querySelectorAll('.fade-in');
+  var fadeObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+  fadeElements.forEach(function(el) { fadeObserver.observe(el); });
+
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+
+  // Create floating particles
+  var particlesContainer = document.getElementById('particles');
+  for (var i = 0; i < 25; i++) {
+    var particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.top = Math.random() * 100 + '%';
+    particle.style.animationDelay = '0s';
+    particle.style.animationDuration = (12 + Math.random() * 8) + 's';
+    particlesContainer.appendChild(particle);
+  }
+
+  // Scroll to section function
+  window.scrollToSection = function(index) {
+    var section = document.getElementById('section-' + index);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+})();
+</script>
+</body>
+</html>

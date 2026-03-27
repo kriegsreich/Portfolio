@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My First Edit</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <!-- Corner Decorations -->
+  <div class="corner-decor top-left"></div>
+  <div class="corner-decor top-right"></div>
+  <div class="corner-decor bottom-left"></div>
+  <div class="corner-decor bottom-right"></div>
+
+  <!-- Floating Particles -->
+  <div class="particles-container" id="particles"></div>
+
+  <!-- Section Divider Top -->
+  <div class="section-divider top">
+    <span></span>
+    <div class="divider-icon"></div>
+    <span></span>
+  </div>
+
+  <div class="nav-buttons">
+    <a href="index.html" class="home-btn">Home</a>
+  </div>
+
+  <section class="hero fade-in">
+    <h1>My First Edit</h1>
+    <p class="subtitle">Breakdown of my editing process</p>
+  </section>
+
+  <section id="details" class="fade-in">
+    <h2 class="section-title">Steps</h2>
+
+    <div class="carousel-wrapper">
+      <button class="carousel-arrow left" id="prevBtn">&#10094;</button>
+      
+      <div class="carousel-viewport">
+        <div class="carousel-track" id="carouselTrack"></div>
+      </div>
+
+      <button class="carousel-arrow right" id="nextBtn">&#10095;</button>
+    </div>
+
+    <button class="play-pause-btn" id="playPauseBtn">&#10074;&#10074;</button>
+  </section>
+
+  <script>
+  (function() {
+    var bgGlow = document.querySelector('.bg-glow');
+
+    document.addEventListener('mousemove', function(e) {
+      bgGlow.style.left = (e.clientX - 250) + 'px';
+      bgGlow.style.top = (e.clientY - 250) + 'px';
+    });
+
+    document.addEventListener('mouseenter', function(e) {
+      bgGlow.classList.add('following');
+      bgGlow.style.left = (e.clientX - 250) + 'px';
+      bgGlow.style.top = (e.clientY - 250) + 'px';
+    });
+
+    document.addEventListener('mouseleave', function() {
+      bgGlow.classList.remove('following');
+    });
+
+    var fadeElements = document.querySelectorAll('.fade-in');
+    var fadeObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        } else {
+          entry.target.classList.remove('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    fadeElements.forEach(function(el) { fadeObserver.observe(el); });
+
+    var steps = [
+      { img: 'https://i.pinimg.com/736x/54/1f/0e/541f0e74e524fd43e26a3dc210c20bb8.jpg', text: 'Step 1: Cutting clips' },
+      { img: 'https://i.pinimg.com/736x/84/bd/7b/84bd7bd491ddf21f9a4eda94309233af.jpg', text: 'Step 2: Color grading' },
+      { img: 'https://i.pinimg.com/736x/84/bd/7b/84bd7bd491ddf21f9a4eda94309233af.jpg', text: 'Step 3: Adding transitions' },
+      { img: 'https://i.pinimg.com/736x/84/bd/7b/84bd7bd491ddf21f9a4eda94309233af.jpg', text: 'Step 4: Adding effects' },
+      { img: 'https://i.pinimg.com/736x/84/bd/7b/84bd7bd491ddf21f9a4eda94309233af.jpg', text: 'Step 5: Exporting final video' },
+      { img: 'https://i.pinimg.com/736x/54/1f/0e/541f0e74e524fd43e26a3dc210c20bb8.jpg', text: 'Step 6: Audio sync' },
+      { img: 'https://i.pinimg.com/736x/84/bd/7b/84bd7bd491ddf21f9a4eda94309233af.jpg', text: 'Step 7: Sound effects' },
+      { img: 'https://i.pinimg.com/736x/84/bd/7b/84bd7bd491ddf21f9a4eda94309233af.jpg', text: 'Step 8: Music selection' },
+      { img: 'https://i.pinimg.com/736x/84/bd/7b/84bd7bd491ddf21f9a4eda94309233af.jpg', text: 'Step 9: Text overlay' },
+      { img: 'https://i.pinimg.com/736x/84/bd/7b/84bd7bd491ddf21f9a4eda94309233af.jpg', text: 'Step 10: Review & adjustments' },
+      { img: 'https://i.pinimg.com/736x/84/bd/7b/84bd7bd491ddf21f9a4eda94309233af.jpg', text: 'Step 11: Final render' },
+      { img: 'https://i.pinimg.com/736x/84/bd/7b/84bd7bd491ddf21f9a4eda94309233af.jpg', text: 'Step 12: Upload & share' },
+      { img: 'https://i.pinimg.com/736x/84/bd/7b/84bd7bd491ddf21f9a4eda94309233af.jpg', text: 'Step 13: Thumbnail creation' },
+      { img: 'https://i.pinimg.com/736x/84/bd/7b/84bd7bd491ddf21f9a4eda94309233af.jpg', text: 'Step 14: SEO optimization' },
+      { img: 'https://i.pinimg.com/736x/84/bd/7b/84bd7bd491ddf21f9a4eda94309233af.jpg', text: 'Step 15: Community engagement' }
+    ];
+
+    var track = document.getElementById('carouselTrack');
+    var cardWidth = 320;
+    var gap = 20;
+    var isPlaying = true;
+    var isPausedByUser = false;
+    var speed = 0.3;
+    var targetSpeed = 0.3;
+
+    function createCards() {
+      for (var i = 0; i < steps.length; i++) {
+        var card = document.createElement('div');
+        card.className = 'step-card';
+        card.innerHTML = '<img src="' + steps[i].img + '" alt="' + steps[i].text + '"><p>' + steps[i].text + '</p>';
+        track.appendChild(card);
+      }
+      for (var i = 0; i < steps.length; i++) {
+        var card = document.createElement('div');
+        card.className = 'step-card';
+        card.innerHTML = '<img src="' + steps[i].img + '" alt="' + steps[i].text + '"><p>' + steps[i].text + '</p>';
+        track.appendChild(card);
+      }
+    }
+
+    createCards();
+
+    var totalWidth = steps.length * (cardWidth + gap);
+
+    function autoScroll() {
+      if (isPlaying && !isPausedByUser) {
+        // Gradually increase speed
+        speed += (targetSpeed - speed) * 0.05;
+      } else {
+        // Gradually decrease speed when paused
+        speed += (0 - speed) * 0.1;
+      }
+      
+      var current = parseFloat(track.dataset.pos) || 0;
+      current += speed;
+      if (current >= totalWidth) {
+        current = current - totalWidth;
+      }
+      track.dataset.pos = current;
+      track.style.transform = 'translateX(-' + current + 'px)';
+      
+      requestAnimationFrame(autoScroll);
+    }
+
+    autoScroll();
+
+    var prevBtn = document.getElementById('prevBtn');
+    var nextBtn = document.getElementById('nextBtn');
+    var playPauseBtn = document.getElementById('playPauseBtn');
+
+    prevBtn.addEventListener('click', function() {
+      var current = parseFloat(track.dataset.pos) || 0;
+      current -= cardWidth * 3;
+      if (current < 0) current += totalWidth;
+      track.dataset.pos = current;
+      track.style.transition = 'transform 0.5s ease';
+      track.style.transform = 'translateX(-' + current + 'px)';
+    });
+
+    nextBtn.addEventListener('click', function() {
+      var current = parseFloat(track.dataset.pos) || 0;
+      current += cardWidth * 3;
+      if (current >= totalWidth) {
+        current = current - totalWidth;
+      }
+      track.dataset.pos = current;
+      track.style.transition = 'transform 0.5s ease';
+      track.style.transform = 'translateX(-' + current + 'px)';
+    });
+
+    playPauseBtn.addEventListener('click', function() {
+      isPausedByUser = !isPausedByUser;
+      playPauseBtn.innerHTML = isPausedByUser ? '&#9654;' : '&#10074;&#10074;';
+    });
+
+    var cards = document.querySelectorAll('.step-card');
+    var cardObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        } else {
+          entry.target.classList.remove('visible');
+        }
+      });
+    }, { threshold: 0.3 });
+
+    cards.forEach(function(card) {
+      card.style.userSelect = 'none';
+      cardObserver.observe(card);
+    });
+
+    // Create floating particles
+    var particlesContainer = document.getElementById('particles');
+    for (var i = 0; i < 25; i++) {
+      var particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.top = Math.random() * 100 + '%';
+      particle.style.animationDelay = '0s';
+      particle.style.animationDuration = (12 + Math.random() * 8) + 's';
+      particlesContainer.appendChild(particle);
+    }
+  })();
+  </script>
+</body>
+</html>
